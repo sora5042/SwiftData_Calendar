@@ -36,7 +36,6 @@ final class CalendarViewModel: ObservableObject {
 
     func fetchTodos() async {
         let todos = await todoRepository.fetchTodos()
-        print(todos)
         self.todos = todos.map(Todo.init)
         filteredTodos()
     }
