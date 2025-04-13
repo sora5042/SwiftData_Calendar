@@ -7,7 +7,7 @@
 
 import SwiftData
 
-final class ModelContainerManager {
+struct ModelContainerManager {
     static let shared = ModelContainerManager()
     let modelContainer: ModelContainer
 
