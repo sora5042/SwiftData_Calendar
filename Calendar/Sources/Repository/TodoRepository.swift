@@ -27,7 +27,7 @@ import SwiftData
                 detail: $0.detail,
                 createdDate: $0.createdDate,
                 startDate: $0.startDate,
-                endDate: $0.endDate,
+                endDate: $0.endDate
             )
         }
     }
@@ -39,7 +39,7 @@ import SwiftData
             detail: todoEntity.detail,
             createdDate: todoEntity.createdDate,
             startDate: todoEntity.startDate,
-            endDate: todoEntity.endDate,
+            endDate: todoEntity.endDate
         )
         context.insert(model)
 
@@ -52,7 +52,7 @@ import SwiftData
         let fetchDescriptor = FetchDescriptor<Todo>(
             predicate: #Predicate { $0.id == todoId }
         )
-        
+
         do {
             if let existingModel = try context.fetch(fetchDescriptor).first {
                 existingModel.title = todoEntity.title
@@ -60,7 +60,7 @@ import SwiftData
                 existingModel.createdDate = todoEntity.createdDate
                 existingModel.startDate = todoEntity.startDate
                 existingModel.endDate = todoEntity.endDate
-                
+
                 guard context.hasChanges else { return }
                 try context.save()
             } else {

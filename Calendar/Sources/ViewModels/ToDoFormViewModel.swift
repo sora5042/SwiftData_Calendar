@@ -1,5 +1,5 @@
 //
-//  TodoFormViewModel.swift
+//  ToDoFormViewModel.swift
 //  Calendar
 //
 //  Created by Sora Oya on 2025/04/07.
@@ -33,7 +33,7 @@ final class TodoFormViewModel: ObservableObject {
         self.mode = mode
         self.selectedDate = selectedDate
         switch mode {
-        case .update(let todo):
+        case let .update(todo):
             self.todo = .init(todo: todo)
         default:
             todo = .init(
@@ -53,7 +53,7 @@ final class TodoFormViewModel: ObservableObject {
             detail: todo.detail,
             createdDate: Date.now,
             startDate: todo.startDate,
-            endDate: todo.endDate,
+            endDate: todo.endDate
         )
 
         switch mode {

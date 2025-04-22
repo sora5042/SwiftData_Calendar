@@ -8,7 +8,6 @@
 import Foundation
 
 extension Date {
-    
     init?(string: String, format: String) {
         guard let date = DateFormatter(dateFormat: format).date(from: string) else {
             return nil

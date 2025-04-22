@@ -1,5 +1,5 @@
 //
-//  TodoFormView.swift
+//  ToDoFormView.swift
 //  Calendar
 //
 //  Created by Sora Oya on 2025/04/07.
@@ -45,7 +45,7 @@ private struct FormContent: View {
     var todo: TodoFormViewModel.Todo
     var selectedDate: String
     var saveAction: @MainActor (TodoFormViewModel.Todo) -> Void
-    
+
     var body: some View {
         Form {
             Section(header: Text("タスク情報")) {

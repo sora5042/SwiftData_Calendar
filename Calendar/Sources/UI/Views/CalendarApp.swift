@@ -5,8 +5,8 @@
 //  Created by Sora Oya on 2025/03/21.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct CalendarApp: App {

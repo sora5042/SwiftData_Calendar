@@ -13,7 +13,7 @@ struct CalendarView: View {
 
     var body: some View {
         VStack(spacing: .zero) {
-            UICalendarWrapper(selectedDates: $viewModel.selectedDates) { dateComponents in
+            UICalendarWrapper(selectedDates: $viewModel.selectedDates) { _ in
                 viewModel.filteredTodos()
             }
             TodoList(
@@ -32,7 +32,7 @@ struct CalendarView: View {
             }
         }) { sheet in
             switch sheet {
-            case .todoForm(let selectedDate, let todo):
+            case let .todoForm(selectedDate, todo):
                 if let todo = todo {
                     TodoFormView(viewModel: .init(mode: .update(todo), selectedDate: selectedDate))
                 } else {
@@ -47,7 +47,7 @@ private struct TodoList: View {
     var todos: [CalendarViewModel.Todo]
     var selectedDate: Date
     var saveTodoAction: @MainActor (CalendarViewModel.Todo?) async -> Void
-    
+
     var body: some View {
         VStack {
             List {
@@ -77,7 +77,7 @@ private struct Row: View {
     var detail: String
     var displayDate: String
     var action: @MainActor () async -> Void
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {

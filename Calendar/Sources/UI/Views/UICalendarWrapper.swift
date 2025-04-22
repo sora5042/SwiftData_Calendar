@@ -12,7 +12,7 @@ struct UICalendarWrapper: UIViewRepresentable {
     @Binding
     var selectedDates: Set<DateComponents>
     var onSelected: (_ dateComponents: DateComponents) -> Void
-    
+
     func makeUIView(context: Context) -> UICalendarView {
         let calendarView = UICalendarView()
         let selectionBehavior = UICalendarSelectionSingleDate(delegate: context.coordinator)
@@ -24,7 +24,7 @@ struct UICalendarWrapper: UIViewRepresentable {
         return calendarView
     }
 
-    func updateUIView(_ uiView: UICalendarView, context: Context) {
+    func updateUIView(_ uiView: UICalendarView, context _: Context) {
         guard let selectionBehavior = uiView.selectionBehavior as? UICalendarSelectionSingleDate else { return }
         if let selectedDate = selectedDates.first {
             selectionBehavior.setSelected(selectedDate, animated: true)
@@ -42,7 +42,7 @@ struct UICalendarWrapper: UIViewRepresentable {
             self.parent = parent
         }
 
-        func dateSelection(_ selection: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
+        func dateSelection(_: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
             guard let dateComponents = dateComponents else { return }
             Task {
                 parent.selectedDates = [dateComponents]

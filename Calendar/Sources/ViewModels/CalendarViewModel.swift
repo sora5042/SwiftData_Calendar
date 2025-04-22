@@ -21,7 +21,7 @@ final class CalendarViewModel: ObservableObject {
     }
 
     private var todos: [Todo] = []
-    
+
     @Published
     var displayTodos: [Todo] = []
 
@@ -43,10 +43,10 @@ final class CalendarViewModel: ObservableObject {
     func filteredTodos() {
         let (startOfDay, endOfDay) = calculateDateRange(for: date)
         let filteredTodos = todos.filter { todo in
-            return (todo.startDate >= startOfDay && todo.startDate <= endOfDay) ||
-            (todo.endDate >= startOfDay && todo.endDate <= endOfDay)
+            (todo.startDate >= startOfDay && todo.startDate <= endOfDay) ||
+                (todo.endDate >= startOfDay && todo.endDate <= endOfDay)
         }
-        self.displayTodos = filteredTodos
+        displayTodos = filteredTodos
     }
 
     private func calculateDateRange(for date: Date) -> (startOfDay: Date, endOfDay: Date) {
@@ -65,11 +65,10 @@ final class CalendarViewModel: ObservableObject {
                 startDate: todo.startDate,
                 endDate: todo.endDate
             )
-            self.sheet = .todoForm(date, todoEntity)
+            sheet = .todoForm(date, todoEntity)
         } else {
-            self.sheet = .todoForm(date, nil)
+            sheet = .todoForm(date, nil)
         }
-        
     }
 }
 
@@ -82,7 +81,7 @@ extension CalendarViewModel {
         var endDate: Date
         var displayDate: String
     }
-    
+
     enum Sheet: Identifiable, Hashable {
         var id: Int { hashValue }
         case todoForm(Date, TodoEntity?)
