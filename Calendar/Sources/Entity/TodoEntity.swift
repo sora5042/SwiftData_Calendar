@@ -8,10 +8,9 @@
 import Foundation
 
 struct TodoEntity: Sendable, Hashable {
-    var id: UUID
+    var id: String
     var title: String
     var detail: String
-    var createdDate: Date
     var startDate: Date
     var endDate: Date
 }

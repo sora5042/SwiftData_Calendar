@@ -28,6 +28,9 @@ final class CalendarViewModel: ObservableObject {
     @Published
     var sheet: Sheet?
 
+    @Published
+    var alert: Alert = .init()
+
     init(
         todoRepository: TodoRepository = .init(context: .init(ModelContainerManager.shared.modelContainer))
     ) {
@@ -55,13 +58,30 @@ final class CalendarViewModel: ObservableObject {
         return (startOfDay, endOfDay)
     }
 
+    func confirmDeleteTodo(_ todo: Todo?) {
+        alert.confirmDelete = todo
+    }
+
+    func deleteTodo(_ todo: Todo?) async {
+        guard let todo else { return }
+        let todoEntity = TodoEntity(
+            id: todo.id,
+            title: todo.title,
+            detail: todo.detail,
+            startDate: todo.startDate,
+            endDate: todo.endDate
+        )
+
+        await todoRepository.deleteTodo(todoEntity: todoEntity)
+        await fetchTodos()
+    }
+
     func sheetTodoForm(_ todo: Todo?) {
         if let todo = todo {
             let todoEntity = TodoEntity(
-                id: UUID(uuidString: todo.id) ?? .init(),
+                id: todo.id,
                 title: todo.title,
                 detail: todo.detail,
-                createdDate: Date.now,
                 startDate: todo.startDate,
                 endDate: todo.endDate
             )
@@ -86,12 +106,16 @@ extension CalendarViewModel {
         var id: Int { hashValue }
         case todoForm(Date, TodoEntity?)
     }
+
+    struct Alert: Hashable {
+        var confirmDelete: Todo?
+    }
 }
 
 extension CalendarViewModel.Todo {
     init(todo: TodoEntity) {
         self.init(
-            id: todo.id.uuidString,
+            id: todo.id,
             title: todo.title,
             detail: todo.detail,
             startDate: todo.startDate,

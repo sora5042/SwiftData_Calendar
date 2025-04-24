@@ -48,10 +48,9 @@ final class TodoFormViewModel: ObservableObject {
 
     func saveContents() async {
         let todoEntity = TodoEntity(
-            id: UUID(),
+            id: todo.id,
             title: todo.title,
             detail: todo.detail,
-            createdDate: Date.now,
             startDate: todo.startDate,
             endDate: todo.endDate
         )
@@ -93,7 +92,7 @@ extension TodoFormViewModel {
 extension TodoFormViewModel.Todo {
     init(todo: TodoEntity) {
         self.init(
-            id: todo.id.uuidString,
+            id: todo.id,
             title: todo.title,
             detail: todo.detail,
             startDate: todo.startDate,

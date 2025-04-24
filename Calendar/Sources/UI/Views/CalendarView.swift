@@ -21,6 +21,8 @@ struct CalendarView: View {
                 selectedDate: viewModel.date
             ) { todo in
                 viewModel.sheetTodoForm(todo)
+            } deleteTodoAction: { todo in
+                viewModel.confirmDeleteTodo(todo)
             }
         }
         .task {
@@ -40,6 +42,18 @@ struct CalendarView: View {
                 }
             }
         }
+        .alert(
+            "本当に削除しますか？",
+            isPresented: .init(value: $viewModel.alert.confirmDelete)
+        ) {
+            Button("いいえ") {}
+            Button("はい") {
+                let todo = viewModel.alert.confirmDelete
+                Task {
+                    await viewModel.deleteTodo(todo)
+                }
+            }
+        }
     }
 }
 
@@ -47,6 +61,7 @@ private struct TodoList: View {
     var todos: [CalendarViewModel.Todo]
     var selectedDate: Date
     var saveTodoAction: @MainActor (CalendarViewModel.Todo?) async -> Void
+    var deleteTodoAction: @MainActor (CalendarViewModel.Todo) async -> Void
 
     var body: some View {
         VStack {
@@ -65,6 +80,15 @@ private struct TodoList: View {
                         displayDate: todo.displayDate
                     ) {
                         await saveTodoAction(todo)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            Task {
+                                await deleteTodoAction(todo)
+                            }
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
                     }
                 }
             }
