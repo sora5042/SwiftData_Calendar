@@ -103,17 +103,24 @@ private struct Row: View {
     var action: @MainActor () async -> Void
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(title)
-                Text(detail)
-                    .foregroundStyle(.secondary)
+        Button {
+            Task {
+                await action()
             }
-            Spacer()
-            VStack(alignment: .trailing) {
-                Text(displayDate)
-                    .font(.caption)
+        } label: {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(title)
+                    Text(detail)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text(displayDate)
+                        .font(.caption)
+                }
             }
+            .foregroundStyle(.black)
         }
     }
 }
