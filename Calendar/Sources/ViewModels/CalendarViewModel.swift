@@ -99,7 +99,6 @@ extension CalendarViewModel {
         var detail: String
         var startDate: Date
         var endDate: Date
-        var displayDate: String
     }
 
     enum Sheet: Identifiable, Hashable {
@@ -119,8 +118,7 @@ extension CalendarViewModel.Todo {
             title: todo.title,
             detail: todo.detail,
             startDate: todo.startDate,
-            endDate: todo.endDate,
-            displayDate: "開始: \(todo.startDate.formatted("MM/dd HH:mm"))\n終了: \(todo.endDate.formatted("MM/dd HH:mm"))"
+            endDate: todo.endDate
         )
     }
 }

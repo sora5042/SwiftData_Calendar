@@ -13,7 +13,9 @@ struct CalendarView: View {
 
     var body: some View {
         VStack(spacing: .zero) {
-            UICalendarWrapper(selectedDates: $viewModel.selectedDates) { _ in
+            UICalendarWrapper(
+                selectedDates: $viewModel.selectedDates,
+            ) { _ in
                 viewModel.filteredTodos()
             }
             TodoList(
@@ -64,34 +66,48 @@ private struct TodoList: View {
     var deleteTodoAction: @MainActor (CalendarViewModel.Todo) async -> Void
 
     var body: some View {
-        VStack {
+        ZStack(alignment: .bottomTrailing) {
             List {
-                Button {
-                    Task {
-                        await saveTodoAction(nil)
-                    }
-                } label: {
-                    Text("タスクを追加する")
-                }
                 ForEach(todos, id: \.id) { todo in
                     Row(
                         title: todo.title,
                         detail: todo.detail,
-                        displayDate: todo.displayDate
+                        startDate: todo.startDate,
+                        endDate: todo.endDate
                     ) {
                         await saveTodoAction(todo)
                     }
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             Task {
                                 await deleteTodoAction(todo)
                             }
                         } label: {
-                            Label("削除", systemImage: "trash")
+                            Image(systemName: "trash")
                         }
                     }
                 }
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             }
+            .listStyle(.plain)
+            .padding(.horizontal)
+            // フローティング追加ボタン
+            Button {
+                Task {
+                    await saveTodoAction(nil)
+                }
+            } label: {
+                Image(systemName: "plus")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Circle().fill(Color.accentColor))
+                    .shadow(radius: 5)
+            }
+            .padding()
         }
     }
 }
@@ -99,7 +115,8 @@ private struct TodoList: View {
 private struct Row: View {
     var title: String
     var detail: String
-    var displayDate: String
+    var startDate: Date
+    var endDate: Date
     var action: @MainActor () async -> Void
 
     var body: some View {
@@ -108,19 +125,32 @@ private struct Row: View {
                 await action()
             }
         } label: {
-            HStack {
-                VStack(alignment: .leading) {
+            HStack(alignment: .center, spacing: 16) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(title)
+                        .font(.headline)
                     Text(detail)
-                        .foregroundStyle(.secondary)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
                 Spacer()
-                VStack(alignment: .trailing) {
-                    Text(displayDate)
-                        .font(.caption)
+                VStack {
+                    Text(startDate.formatted("HH:mm"))
+                        .font(.callout)
+                    Text("〜")
+                        .font(.callout)
+                    Text(endDate.formatted("HH:mm"))
+                        .font(.callout)
                 }
             }
-            .foregroundStyle(.black)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.systemBackground))
+                    .shadow(color: .black.opacity(0.05), radius: 4, x: 1, y: 2)
+            )
         }
+        .buttonStyle(.plain)
+        .padding(4)
     }
 }
